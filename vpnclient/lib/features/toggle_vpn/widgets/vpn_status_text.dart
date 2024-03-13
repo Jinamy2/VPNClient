@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vpnclient/common/app_constants/app_colors.dart';
-import 'package:vpnclient/features/toggle_vpn/models/vpn_state.dart';
 import 'package:vpnclient/common/utils/extensions_app.dart';
+import 'package:vpnclient/features/toggle_vpn/models/vpn_state.dart';
 
 class VpnStatusText extends StatelessWidget {
   const VpnStatusText({
@@ -23,9 +23,12 @@ class VpnStatusText extends StatelessWidget {
       };
 
   @override
-  Widget build(BuildContext context) => Text(
-        status.getStatusText(context),
-        style: context.textTheme.headlineMedium!
-            .copyWith(color: getTextColor, fontSize: 14),
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.only(top: 30),
+        child: Text(
+          status.description,
+          style: context.textTheme.headlineMedium!
+              .copyWith(color: getTextColor, fontSize: 14),
+        ),
       );
 }

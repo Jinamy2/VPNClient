@@ -9,20 +9,22 @@ environment:
 
 
 dependencies:
-  flutter:
-    sdk: flutter
-
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
+  dart_code_linter:
+    git:
+      url: https://github.com/The-Redhat/dart-code-linter.git
+      ref: fix_analyzer_6.0_errors
   cupertino_icons: ^1.0.6
   provider: ^6.1.2
+  flutter:
+    sdk: flutter
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
   flutter_svg: ^2.0.10+1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0
+  lint: ^2.1.2
 
 
 
