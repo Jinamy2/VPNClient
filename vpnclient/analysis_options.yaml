@@ -14,6 +14,7 @@ linter:
     unawaited_futures: true
     unnecessary_lambdas: true
     use_decorated_box: true
+    avoid_classes_with_only_static_members: false
 
     # shorter and prettier syntax
     cascade_invocations: true

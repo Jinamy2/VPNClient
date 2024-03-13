@@ -1,10 +1,12 @@
 enum VpnState {
-  active,
-  disable,
-  connecting,
-  disconnecting,
-  noConfigFile,
-  unknown;
+  active('VPN подключен'),
+  disable('VPN отключен'),
+  connecting('Подключение...'),
+  disconnecting('Отключение'),
+  noConfigFile('Примите конфигурацию VPN'),
+  unknown('Попробуйте снова');
+
+  const VpnState(this.description);
 
   factory VpnState.fromString(String value) => switch (value) {
         'Active' => VpnState.active,
@@ -14,4 +16,6 @@ enum VpnState {
         'NoConfigFile' => VpnState.noConfigFile,
         _ => VpnState.unknown
       };
+
+  final String description;
 }
