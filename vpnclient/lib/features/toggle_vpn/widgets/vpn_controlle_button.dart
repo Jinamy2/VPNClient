@@ -39,7 +39,7 @@ class VpnControlleButton extends StatelessWidget {
                 height: 140.0,
               ),
             ),
-            if (status == VpnState.disable || status == VpnState.unknown)
+            if (status == VpnState.disable)
               SvgPicture.asset(
                 'assets/off_vpn.svg',
                 height: 30,
@@ -47,17 +47,23 @@ class VpnControlleButton extends StatelessWidget {
               ),
 
             if (status == VpnState.active)
-              SvgPicture.asset(
-                'assets/vpn_on.svg',
-                height: 30,
-                width: 30,
+              const Icon(
+                Icons.check,
+                size: 30,
+                color: AppColor.vpnOnStatusColor,
               ),
 
             if (status == VpnState.noConfigFile)
-              SvgPicture.asset(
-                'assets/vpn_permission.svg',
-                height: 30,
-                width: 30,
+              const Icon(
+                Icons.settings,
+                size: 30,
+                color: AppColor.getPermissionStatusColor,
+              ),
+            if (status == VpnState.unknown)
+              const Icon(
+                Icons.close,
+                size: 30,
+                color: AppColor.errorColor,
               ),
           ],
         ),

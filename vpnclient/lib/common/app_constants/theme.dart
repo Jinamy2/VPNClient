@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:vpnclient/common/app_constants/app_colors.dart';
+import 'package:vpnclient/common/utils/extensions_app.dart';
+import 'package:vpnclient/common/utils/navigator_key.dart';
 
 ThemeData get appTheme => ThemeData(
+      appBarTheme: AppBarTheme(
+        color: AppColor.mainPurple,
+        titleTextStyle: navigatorKey.currentContext!.textTheme.headlineLarge!
+            .copyWith(fontSize: 18, color: AppColor.whiteColor),
+        toolbarHeight:
+            MediaQuery.of(navigatorKey.currentContext!).size.height * 0.13,
+      ),
       scaffoldBackgroundColor: AppColor.whiteColor,
       hintColor: AppColor.hintTextStyleColor,
       fontFamily: 'Manrope',
