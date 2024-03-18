@@ -2,6 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:vpnclient/common/app_constants/app_colors.dart';
 
 ThemeData get appTheme => ThemeData(
+      appBarTheme: AppBarTheme(
+        color: AppColor.mainPurple,
+        titleTextStyle: const TextStyle(
+          fontFamily: 'Manrope',
+          fontWeight: FontWeight.w700,
+          fontSize: 28,
+          color: AppColor.whiteColor,
+        ).copyWith(fontSize: 18, color: AppColor.whiteColor),
+      ),
       scaffoldBackgroundColor: AppColor.whiteColor,
       hintColor: AppColor.hintTextStyleColor,
       fontFamily: 'Manrope',
