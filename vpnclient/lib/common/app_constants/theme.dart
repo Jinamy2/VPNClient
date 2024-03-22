@@ -11,7 +11,7 @@ ThemeData get appTheme => ThemeData(
           color: AppColor.whiteColor,
         ).copyWith(fontSize: 18, color: AppColor.whiteColor),
       ),
-      scaffoldBackgroundColor: AppColor.whiteColor,
+      scaffoldBackgroundColor: AppColor.backgroundColor,
       hintColor: AppColor.hintTextStyleColor,
       fontFamily: 'Manrope',
       textTheme: const TextTheme(

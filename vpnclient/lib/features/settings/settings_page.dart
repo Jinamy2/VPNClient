@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vpnclient/common/app_constants/app_routes.dart';
 import 'package:vpnclient/common/utils/navigator_key.dart';
 import 'package:vpnclient/common/widgets/app_bar/components/back_button.dart';
 import 'package:vpnclient/common/widgets/push_to_page_button.dart';
@@ -22,7 +23,7 @@ class SettingsScreen extends StatelessWidget {
             children: [
               PushToPageButton(
                 padding: const EdgeInsets.all(20),
-                onTap: () {},
+                onTap: () => Navigator.of(context).pushNamed(Routes.websites),
                 title: 'Сайты',
                 assetIcon: 'assets/website.svg',
               ),

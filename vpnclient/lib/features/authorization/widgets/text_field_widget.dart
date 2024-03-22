@@ -59,7 +59,7 @@ class TextFieldWidget extends StatelessWidget {
                 ),
                 hintText: hintText,
                 hintStyle: const TextStyle(
-                  color: AppColor.hintTextStyleColor,
+                  color: AppColor.hintTextPurpleColor,
                   fontSize: 14,
                 ),
               ),
