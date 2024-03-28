@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ikev2_dart/models/vpn_state.dart';
 import 'package:vpnclient/common/app_constants/app_colors.dart';
 import 'package:vpnclient/common/utils/extensions_app.dart';
-import 'package:vpnclient/features/toggle_vpn/models/vpn_state.dart';
 
 class VpnStatusText extends StatelessWidget {
   const VpnStatusText({
@@ -11,15 +11,14 @@ class VpnStatusText extends StatelessWidget {
   });
 
   // final VoidCallback onTap;
-  final VpnState status;
+  final FlutterVpnState status;
 
   Color get getTextColor => switch (status) {
-        VpnState.active => AppColor.vpnOnStatusColor,
-        VpnState.disable => AppColor.shadowVpnControlleButtonColor,
-        VpnState.connecting => AppColor.mainPurple,
-        VpnState.disconnecting => AppColor.mainPurple,
-        VpnState.noConfigFile => AppColor.getPermissionStatusColor,
-        VpnState.unknown => AppColor.errorColor,
+        FlutterVpnState.connected => AppColor.vpnOnStatusColor,
+        FlutterVpnState.disconnected => AppColor.shadowVpnControlleButtonColor,
+        FlutterVpnState.connecting => AppColor.mainPurple,
+        FlutterVpnState.disconnecting => AppColor.mainPurple,
+        FlutterVpnState.error => AppColor.errorColor,
       };
 
   @override

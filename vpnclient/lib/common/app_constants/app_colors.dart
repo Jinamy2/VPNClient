@@ -12,4 +12,5 @@ class AppColor {
   static const hintTextStyleColor = Color(0x33090F1E);
   static const hintTextPurpleColor = Color(0x99FFFFFF);
   static const shadowVpnControlleButtonColor = Color(0x4B000000);
+  static const splashScreenColor = Color(0xFF6600B5);
 }
