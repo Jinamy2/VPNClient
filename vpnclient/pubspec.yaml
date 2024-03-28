@@ -21,6 +21,9 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   flutter_svg: ^2.0.10+1
   get_it: ^7.6.7
+  ikev2_dart:
+    path: ../ikev2_dart
+  flutter_secure_storage: ^9.0.0
 
 dev_dependencies:
   flutter_test:

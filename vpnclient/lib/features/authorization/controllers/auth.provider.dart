@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:vpnclient/common/app_constants/app_routes.dart';
 import 'package:vpnclient/common/utils/auth_data.dart';
 import 'package:vpnclient/common/utils/navigator_key.dart';
+import 'package:vpnclient/main.dart';
 
 class AuthProvider extends ChangeNotifier {
   AuthProvider();
   bool loading = false;
+  String login = '';
+  String password = '';
   final loginTextFieldController = TextEditingController();
   final passwordCheckTextFieldController = TextEditingController();
 
@@ -25,15 +28,18 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void onEnterTab() {
+  Future<void> onEnterTab() async {
     loading = true;
-    authData.containsKey(loginTextFieldController.text)
+    login = loginTextFieldController.text;
+    password = passwordCheckTextFieldController.text;
+    authData.containsKey(login)
         ? loginValidation = true
         : loginValidation = false;
-    authData[loginTextFieldController.text] ==
-            passwordCheckTextFieldController.text
+    authData[login] == password
         ? passwordValidation = true
         : passwordValidation = false;
+    await storage.write(key: 'login', value: login);
+    await storage.write(key: 'password', value: password);
     notifyListeners();
     if (loginValidation && passwordValidation) {
       sendToMainScreen();
