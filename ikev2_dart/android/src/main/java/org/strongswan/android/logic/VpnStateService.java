@@ -25,19 +25,26 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
+import android.util.Log;
 
 import org.strongswan.android.data.VpnProfile;
 import org.strongswan.android.logic.imc.ImcState;
 import org.strongswan.android.logic.imc.RemediationInstruction;
+import org.strongswan.android.utils.IPRange;
+import org.strongswan.android.utils.IPRangeSet;
 import org.strongswan.android.utils.traffic.ITrafficSpeedListener;
 import org.strongswan.android.utils.traffic.TrafficSpeedMeasurer;
 import org.strongswan.android.utils.traffic.TrafficType;
 
 import java.lang.ref.WeakReference;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 
 import androidx.core.content.ContextCompat;
@@ -51,6 +58,8 @@ public class VpnStateService extends Service {
     private Handler mHandler;
     private VpnProfile mProfile;
     private Bundle mProfileInfo;
+    private ArrayList<String> mExcludedSubnets = new ArrayList<>();
+    private  ArrayList<String>  mIncludedSubnetsv4 = new ArrayList<>();
     private State mState = State.DISABLED;
     private ErrorState mError = ErrorState.NO_ERROR;
     private ImcState mImcState = ImcState.UNKNOWN;
@@ -132,6 +141,47 @@ public class VpnStateService extends Service {
     public void registerListener(VpnStateListener listener, ITrafficSpeedListener iTrafficSpeedListener) {
         trafficSpeedMeasurer.registerListener(iTrafficSpeedListener);
         mListeners.add(listener);
+    }
+
+    public void setRouteRule(String rule, String type)  {
+            String tag = getPackageName();
+            int importance = Log.INFO;
+            Log.println(importance, tag, " current size  mExcludedSubnets"+ mExcludedSubnets.size());
+            Log.println(importance, tag, " current size  mIncludedSubnetsv4"+ mIncludedSubnetsv4.size());
+            Log.println(importance, tag, " New rule "+ rule);
+            Log.println(importance, tag, " New rule type "+ type);
+            if (type.equals("direct")){
+                mExcludedSubnets.add(rule);
+                Log.println(importance, tag, " Add ditect rule");
+            }
+            if (type.equals("block")){
+                mIncludedSubnetsv4.add(rule);
+                Log.println(importance, tag, " Add block rule "+ mExcludedSubnets.size());
+            }
+
+    }
+
+    public void deleteRouteRule(String rule, String type)  { 
+        String tag = getPackageName();
+        int importance = Log.INFO;
+        if (type.equals("direct")){
+            int indexToRemove = mExcludedSubnets.indexOf(rule);
+            
+            mExcludedSubnets.remove(indexToRemove);
+        }
+        if (type.equals("block")){
+            int indexToRemove = mIncludedSubnetsv4.indexOf(rule);
+            mIncludedSubnetsv4.remove(indexToRemove);
+        }
+
+    }
+
+    public ArrayList<String> getExcRouteRules() {
+       return mExcludedSubnets;
+    }
+
+    public ArrayList<String> getIncRouteRules() {
+       return mIncludedSubnetsv4;
     }
 
 

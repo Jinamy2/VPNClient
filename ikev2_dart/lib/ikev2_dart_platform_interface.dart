@@ -28,6 +28,12 @@ abstract class Ikev2DartPlatform extends PlatformInterface {
 
   Future<void> disconnect() async => throw UnimplementedError();
 
+  Future<void> setRuleType(String rule, String type) async =>
+      throw UnimplementedError();
+
+  Future<void> deleteRuleType(String rule, String type) async =>
+      throw UnimplementedError();
+
   Future<void> connectIkev2EAP({
     required String server,
     required String username,
