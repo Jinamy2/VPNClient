@@ -7,6 +7,9 @@ import 'package:ikev2_dart/models/vpn_state.dart';
 import 'package:vpnclient/common/utils/getit_globals.dart';
 
 class VpnProvider extends ChangeNotifier {
+  VpnProvider() {
+    Ikev2DartPlatform.instance.currentState.then((s) => state = s);
+  }
   FlutterVpnState state = FlutterVpnState.disconnected;
   CharonErrorState? charonState = CharonErrorState.NO_ERROR;
   Timer? _timer;

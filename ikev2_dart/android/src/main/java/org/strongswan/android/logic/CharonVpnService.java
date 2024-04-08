@@ -39,6 +39,11 @@ import android.security.KeyChainException;
 import android.system.OsConstants;
 import android.util.Log;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+
+import com.example.ikev2_dart.R;
+
 import org.strongswan.android.data.VpnProfile;
 import org.strongswan.android.data.VpnProfile.SelectedAppsHandling;
 import org.strongswan.android.data.VpnType;
@@ -70,11 +75,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.SortedSet;
 import java.util.UUID;
-
-import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
-
-import com.example.ikev2_dart.R;
 
 public class CharonVpnService extends VpnService implements Runnable, VpnStateService.VpnStateListener {
     private static final String TAG = CharonVpnService.class.getSimpleName();
@@ -137,11 +137,31 @@ public class CharonVpnService extends VpnService implements Runnable, VpnStateSe
         if (intent != null) {
             VpnProfile profile = null;
             boolean retry = false;
+            String tag = getPackageName();
+            int importance = Log.INFO;
 
             if (VPN_SERVICE_ACTION.equals(intent.getAction()) || !DISCONNECT_ACTION.equals(intent.getAction())) {
                 Bundle bundle = intent.getExtras();
                 if (bundle != null) {
                     profile = new VpnProfile();
+                    ArrayList<String> newIncluded = mService.getIncRouteRules();
+                    if (newIncluded.size() != 0) {
+                        ArrayList<String> includedSubnets = new ArrayList<>();
+                        for (String ipAddress : newIncluded) {
+                            includedSubnets.add(ipAddress + "/32");
+                        }
+                        profile.setIncludedSubnets(String.join(",", includedSubnets));
+                        Log.println(importance, tag, " add rule into profile");
+                    }
+                    ArrayList<String> newExcluded = mService.getExcRouteRules();
+                    if (newExcluded.size() != 0) {
+                        ArrayList<String> excludedSubnets = new ArrayList<>();
+                        for (String ipAddress : newExcluded) {
+                            excludedSubnets.add(ipAddress + "/32");
+                        }
+                        profile.setExcludedSubnets(String.join(",", excludedSubnets));
+                        Log.println(importance, tag, " add rule into profile");
+                    }
                     profile.setId(1);
                     profile.setUUID(UUID.randomUUID());
                     profile.setName(bundle.getString("Name"));
@@ -385,7 +405,7 @@ public class CharonVpnService extends VpnService implements Runnable, VpnStateSe
                 .setCategory(NotificationCompat.CATEGORY_SERVICE)
                 .setVisibility(publicVersion ? NotificationCompat.VISIBILITY_PUBLIC
                         : NotificationCompat.VISIBILITY_PRIVATE);
-        int s = R.string.state_disabled;
+        int s = R.string.state_disabled_ru;
         if (error != ErrorState.NO_ERROR) {
             s = mService.getErrorText();
             builder.setSmallIcon(R.drawable.ic_notification_warning);
@@ -394,7 +414,7 @@ public class CharonVpnService extends VpnService implements Runnable, VpnStateSe
             if (!publicVersion && profile != null) {
                 int retry = mService.getRetryIn();
                 if (retry > 0) {
-                    builder.setContentText(getResources().getQuantityString(R.plurals.retry_in, retry, retry));
+                    builder.setContentText(getResources().getQuantityString(R.plurals.retry_in_ru, retry, retry));
                     builder.setProgress(mService.getRetryTimeout(), retry, false);
                 }
 
@@ -412,31 +432,31 @@ public class CharonVpnService extends VpnService implements Runnable, VpnStateSe
 
             switch (state) {
                 case CONNECTING:
-                    s = R.string.state_connecting;
+                    s = R.string.state_connecting_ru;
                     builder.setSmallIcon(R.drawable.ic_notification_connecting);
                     builder.setColor(ContextCompat.getColor(this, R.color.warning_text));
                     add_action = true;
                     break;
                 case CONNECTED:
-                    s = R.string.state_connected;
+                    s = R.string.state_connected_ru;
                     builder.setColor(ContextCompat.getColor(this, R.color.success_text));
                     builder.setUsesChronometer(true);
                     add_action = true;
                     break;
                 case DISCONNECTING:
-                    s = R.string.state_disconnecting;
+                    s = R.string.state_disconnecting_ru;
                     break;
             }
         }
         builder.setContentTitle(getString(s));
         if (!publicVersion) {
-//            if (add_action) {
-//                Intent intent = new Intent(getApplicationContext(), VpnProfileControlActivity.class);
-//                intent.setAction(VpnProfileControlActivity.DISCONNECT);
-//                PendingIntent pending = PendingIntent.getActivity(getApplicationContext(), 0, intent,
-//                        PendingIntent.FLAG_UPDATE_CURRENT);
-//                builder.addAction(R.drawable.ic_notification_disconnect, getString(R.string.disconnect), pending);
-//            }
+            if (add_action) {
+//                Context context = getApplicationContext();
+//                Intent intent = new Intent(context, CharonVpnService.class);
+//                intent.setAction(CharonVpnService.DISCONNECT_ACTION);
+//                PendingIntent pending = PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//                builder.addAction(0, getString(R.string.disconnect), pending);
+            }
             if (error == ErrorState.NO_ERROR) {
                 builder.setContentText(name);
             }
@@ -916,6 +936,7 @@ public class CharonVpnService extends VpnService implements Runnable, VpnStateSe
             for (IPRange range : included) {
                 if (range.getFrom() instanceof Inet4Address) {
                     mIncludedSubnetsv4.add(range);
+
                 } else if (range.getFrom() instanceof Inet6Address) {
                     mIncludedSubnetsv6.add(range);
                 }
@@ -1126,4 +1147,6 @@ public class CharonVpnService extends VpnService implements Runnable, VpnStateSe
     private static String getDeviceString() {
         return Build.MODEL + " - " + Build.BRAND + "/" + Build.PRODUCT + "/" + Build.MANUFACTURER;
     }
+
+
 }
