@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
@@ -7,12 +9,19 @@ import 'package:vpnclient/common/utils/getit_globals.dart';
 import 'package:vpnclient/common/utils/isar_service.dart';
 import 'package:vpnclient/common/utils/navigator_key.dart';
 import 'package:vpnclient/features/authorization/controllers/auth.provider.dart';
+import 'package:window_size/window_size.dart';
 
 const storage = FlutterSecureStorage();
 
 void main() {
   runApp(const MyApp());
   WidgetsFlutterBinding.ensureInitialized();
+  if (Platform.isWindows || Platform.isMacOS) {
+    setWindowTitle('Vpn Client');
+    setWindowMaxSize(const Size(980, 720));
+    setWindowMinSize(const Size(450, 812));
+  }
+
   getIt.registerSingleton<AuthProvider>(AuthProvider());
   IsarService();
 }
