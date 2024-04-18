@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:ikev2_dart/models/vpn_state.dart';
 import 'package:vpnclient/common/app_constants/app_colors.dart';
-import 'package:vpnclient/features/toggle_vpn/models/vpn_state.dart';
 
 class VpnControlleButton extends StatelessWidget {
   const VpnControlleButton({
@@ -10,7 +10,7 @@ class VpnControlleButton extends StatelessWidget {
     required this.status,
   });
   final VoidCallback onTap;
-  final VpnState status;
+  final FlutterVpnState status;
 
   @override
   Widget build(BuildContext context) => InkResponse(
@@ -39,27 +39,20 @@ class VpnControlleButton extends StatelessWidget {
                 height: 140.0,
               ),
             ),
-            if (status == VpnState.disable)
+            if (status == FlutterVpnState.disconnected)
               SvgPicture.asset(
                 'assets/off_vpn.svg',
                 height: 30,
                 width: 30,
               ),
 
-            if (status == VpnState.active)
+            if (status == FlutterVpnState.connected)
               const Icon(
                 Icons.check,
                 size: 30,
                 color: AppColor.vpnOnStatusColor,
               ),
-
-            if (status == VpnState.noConfigFile)
-              const Icon(
-                Icons.settings,
-                size: 30,
-                color: AppColor.getPermissionStatusColor,
-              ),
-            if (status == VpnState.unknown)
+            if (status == FlutterVpnState.error)
               const Icon(
                 Icons.close,
                 size: 30,

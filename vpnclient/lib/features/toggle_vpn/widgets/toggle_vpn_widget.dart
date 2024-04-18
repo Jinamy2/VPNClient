@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ikev2_dart/models/vpn_state.dart';
 import 'package:vpnclient/common/app_constants/app_colors.dart';
-import 'package:vpnclient/features/toggle_vpn/models/vpn_state.dart';
 import 'package:vpnclient/features/toggle_vpn/widgets/vpn_controlle_button.dart';
 
 class ToogleVpnWidget extends StatelessWidget {
@@ -11,7 +11,7 @@ class ToogleVpnWidget extends StatelessWidget {
   });
 
   final VoidCallback onTap;
-  final VpnState status;
+  final FlutterVpnState status;
 
   @override
   Widget build(BuildContext context) => Stack(
@@ -29,7 +29,7 @@ class ToogleVpnWidget extends StatelessWidget {
           ),
           VpnControlleButton(
             status: status,
-            onTap: () {},
+            onTap: onTap,
           ),
         ],
       );

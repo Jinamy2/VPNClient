@@ -1,5 +1,5 @@
 name: ikev2_dart
-description: "A new Flutter plugin project."
+description: "ikev2 flutter plugin"
 version: 0.0.1
 homepage:
 
@@ -11,6 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
+  quiver: ^3.2.1
+  uuid: ^4.3.3
 
 dev_dependencies:
   flutter_test:
@@ -36,7 +38,7 @@ flutter:
     platforms:
       android:
         package: com.example.ikev2_dart
-        pluginClass: Ikev2DartPlugin
+        pluginClass: FlutterVpnPlugin
       ios:
         pluginClass: Ikev2DartPlugin
       macos:
