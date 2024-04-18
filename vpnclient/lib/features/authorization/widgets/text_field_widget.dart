@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vpnclient/common/app_constants/app_colors.dart';
 import 'package:vpnclient/common/utils/extensions_app.dart';
+import 'package:vpnclient/common/utils/getit_globals.dart';
 
 class TextFieldWidget extends StatelessWidget {
   const TextFieldWidget({
@@ -30,6 +31,7 @@ class TextFieldWidget extends StatelessWidget {
         child: Column(
           children: [
             TextField(
+              onSubmitted: (value) => auth.onEnterTab(),
               controller: controller,
               cursorColor: AppColor.whiteColor,
               style: const TextStyle(color: AppColor.whiteColor),
