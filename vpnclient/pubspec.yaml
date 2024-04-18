@@ -24,6 +24,7 @@ dependencies:
   ikev2_dart:
     path: ../ikev2_dart
   flutter_secure_storage: ^9.0.0
+  shared_preferences: ^2.2.3
 
 dev_dependencies:
   flutter_test:

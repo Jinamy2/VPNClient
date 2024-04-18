@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vpnclient/common/app_constants/app_colors.dart';
 import 'package:vpnclient/common/app_constants/app_routes.dart';
 import 'package:vpnclient/common/utils/getit_globals.dart';
@@ -19,6 +20,7 @@ class _InitPageState extends State<InitPage> {
   @override
   void initState() {
     super.initState();
+    checkSession();
 
     /// try and find userId in SecureStorage
     storage.read(key: 'login').then((login) {
@@ -37,6 +39,21 @@ class _InitPageState extends State<InitPage> {
         sendToAuthScreen();
       }
     });
+  }
+
+  Future<void> checkSession() async {
+    final keysToEliminate = [
+      'login',
+      'password',
+    ];
+
+    final prefs = await SharedPreferences.getInstance();
+
+    if (prefs.getBool('first_run') ?? true) {
+      await Future.wait(keysToEliminate.map((key) => storage.delete(key: key)));
+
+      await prefs.setBool('first_run', false);
+    }
   }
 
   @override
