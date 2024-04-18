@@ -24,13 +24,14 @@ dependencies:
   ikev2_dart:
     path: ../ikev2_dart
   flutter_secure_storage: ^9.0.0
+  shared_preferences: ^2.2.3
   isar: ^3.1.0+1
   isar_flutter_libs: ^3.1.0+1
   path_provider: ^2.1.2
   uuid: ^4.3.3
   fluttertoast: ^8.2.4
   http: ^1.2.1
-
+  
 dev_dependencies:
   build_runner: ^2.4.9
   flutter_test:
