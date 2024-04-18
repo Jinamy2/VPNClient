@@ -14,12 +14,14 @@
 
 package com.example.ikev2_dart
 
+import android.annotation.TargetApi
 import android.app.Activity.RESULT_OK
 import android.app.Service
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
 import android.net.VpnService
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import androidx.annotation.NonNull
@@ -106,6 +108,7 @@ class FlutterVpnPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         activityBinding = binding
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
         when (call.method) {
             "prepare" -> {
@@ -148,6 +151,22 @@ class FlutterVpnPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 if (args.containsKey("port")) profileInfo.putInt("Port", args["Port"] as Int)
 
                 vpnStateService?.connect(profileInfo, true)
+                result.success(true)
+            }
+            "setRuleType" -> {
+                val args = call.arguments as Map<*, *>
+
+                val rule = args["rule"] as String
+                val type = args["type"] as String
+                vpnStateService?.setRouteRule(rule, type)
+                result.success(true)
+            }
+             "deleteRuleType" -> {
+                val args = call.arguments as Map<*, *>
+                val rule = args["rule"] as String
+                 val type = args["type"] as String
+
+                vpnStateService?.deleteRouteRule(rule, type)
                 result.success(true)
             }
             "getCurrentState" -> {

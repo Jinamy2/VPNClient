@@ -66,6 +66,22 @@ class MethodChannelIkev2Dart extends Ikev2DartPlatform {
     return (await methodChannel.invokeMethod<bool>('prepare'))!;
   }
 
+  @override
+  Future<void> setRuleType(String rule, String type) async {
+    return methodChannel.invokeMethod<void>('setRuleType', {
+      'rule': rule,
+      'type': type,
+    });
+  }
+
+  @override
+  Future<void> deleteRuleType(String rule, String type) async {
+    return methodChannel.invokeMethod<void>('deleteRuleType', {
+      'rule': rule,
+      'type': type,
+    });
+  }
+
   /// Check if vpn connection has been prepared. (Android only)
   @override
   Future<bool> get prepared async {

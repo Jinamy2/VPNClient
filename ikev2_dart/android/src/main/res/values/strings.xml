@@ -26,6 +26,14 @@
     <string name="state_disconnecting">Disconnecting&#8230;</string>
     <string name="state_disabled">No active VPN</string>
 
+
+    <string name="state_connecting_ru">Идет подключение…&#8230;</string>
+    <string name="state_connected_ru">Подключено</string>
+    <string name="state_disconnecting_ru">Отключен&#8230;</string>
+    <string name="state_disabled_ru">Нет активного VPN</string>
+
+    <string name="disconnect">Отключиться</string>
+
     <!-- Dialogs -->
     <string name="error_lookup_failed">Server address lookup failed</string>
     <string name="error_unreachable">Server is unreachable</string>
@@ -38,5 +46,9 @@
     <plurals name="retry_in">
         <item quantity="one">Retry in %1$d second</item>
         <item quantity="other">Retry in %1$d seconds</item>
+    </plurals>
+    <plurals name="retry_in_ru">
+        <item quantity="one">Попробуйте через %1$d секунд</item>
+        <item quantity="other">Попробуйте через %1$d секунд</item>
     </plurals>
 </resources>

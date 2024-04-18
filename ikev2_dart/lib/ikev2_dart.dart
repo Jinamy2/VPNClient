@@ -35,6 +35,12 @@ class Ikev2Dart {
   /// Disconnect and stop VPN service.
   static Future<void> disconnect() => Ikev2DartPlatform.instance.disconnect();
 
+  static Future<void> setRuleType(String rule, String type) =>
+      Ikev2DartPlatform.instance.setRuleType(rule, type);
+
+  static Future<void> deleteRuleType(String rule, String type) =>
+      Ikev2DartPlatform.instance.deleteRuleType(rule, type);
+
   /// Connect to VPN. (IKEv2-EAP)
   ///
   /// This will create a background VPN service.
