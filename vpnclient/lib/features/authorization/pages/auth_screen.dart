@@ -41,7 +41,7 @@ class AuthScreen extends StatelessWidget {
                   padding: EdgeInsets.only(
                     bottom: auth.loading ? 20 : 100,
                   ),
-                  keyboardType: TextInputType.text,
+                  keyboardType: TextInputType.visiblePassword,
                   errorText:
                       auth.passwordValidation ? null : '*Неверный пароль',
                   hintText: 'Введите пароль',

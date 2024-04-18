@@ -40,19 +40,23 @@ Ikev2DartPlugin::~Ikev2DartPlugin() {}
 void Ikev2DartPlugin::HandleMethodCall(
     const flutter::MethodCall<flutter::EncodableValue> &method_call,
     std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
-  if (method_call.method_name().compare("getPlatformVersion") == 0) {
-    std::ostringstream version_stream;
-    version_stream << "Windows ";
-    if (IsWindows10OrGreater()) {
-      version_stream << "10+";
-    } else if (IsWindows8OrGreater()) {
-      version_stream << "8";
-    } else if (IsWindows7OrGreater()) {
-      version_stream << "7";
-    }
-    result->Success(flutter::EncodableValue(version_stream.str()));
+  if (method_call.method_name().compare("connect") == 0) {
+    std::cout << "Connect";
+    //TODO connect to vpn
+    result->Success();
   } else {
+    if (method_call.method_name().compare("disconnect") == 0) {
+      std::cout << "disconnect";
+      result->Success();
+      //TODO disconnect vpn
+    } else {
+     if (method_call.method_name().compare("getCurrentState") == 0) {
+      std::cout << "getCurrentState";
+      result->Success();
+      //TODO get state
+    } else {
     result->NotImplemented();
+  }
   }
 }
 

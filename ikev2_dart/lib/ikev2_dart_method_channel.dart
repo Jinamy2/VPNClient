@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -38,6 +38,9 @@ class MethodChannelIkev2Dart extends Ikev2DartPlatform {
   Future<FlutterVpnState> get currentState async {
     final state = await methodChannel.invokeMethod<int>('getCurrentState');
     assert(state != null, 'Received a null state from `getCurrentState` call.');
+    if (Platform.isWindows) {
+      return FlutterVpnState.connected;
+    }
     return FlutterVpnState.values[state!];
   }
 

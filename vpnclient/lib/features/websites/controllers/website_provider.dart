@@ -59,13 +59,13 @@ class RoutingSettingsProvider extends ChangeNotifier {
 
   bool searchMatchesInUserWebsites(String query) {
     for (final e in rulesList) {
-      if (e.domen != null && e.domen!.toLowerCase().contains(query)) {
+      if (e.domen != null && e.domen! == query) {
         Fluttertoast.showToast(
           msg: 'Уже в вашем списке!',
         );
         return true;
       }
-      if (e.ip != null && e.ip!.toLowerCase().contains(query)) {
+      if (e.ip != null && e.ip! == query) {
         Fluttertoast.showToast(
           msg: 'Уже в вашем списке!',
         );
