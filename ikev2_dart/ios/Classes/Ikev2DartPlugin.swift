@@ -3,8 +3,12 @@ import UIKit
 
 @available(iOS 13.0.0, *)
 public class Ikev2DartPlugin: NSObject, FlutterPlugin {
+    
+    @Lateinit static var channel: FlutterMethodChannel
+    
     public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "ikev2_dart", binaryMessenger: registrar.messenger())
+    channel = FlutterMethodChannel(name: "ikev2_dart", binaryMessenger: registrar.messenger())
+        
     let stateChannel = FlutterEventChannel(name: "ikev2_dart_states", binaryMessenger: registrar.messenger())
     //let trafficChannel = FlutterEventChannel(name: "ikev2_dart_traffic", binaryMessenger: registrar.messenger())
 
@@ -35,4 +39,9 @@ public class Ikev2DartPlugin: NSObject, FlutterPlugin {
       }
     }
   }
+    
+    static func updateVpnState(newState: FlutterVpnState){
+        channel.invokeMethod("updateVpnState", arguments: newState.rawValue)
+    }
+    
 }

@@ -40,6 +40,10 @@ class PushToPageButton extends StatelessWidget {
                           assetIcon,
                           width: 18,
                           height: 18,
+                          colorFilter: const ColorFilter.mode(
+                            Colors.white,
+                            BlendMode.srcATop,
+                          ),
                         ),
                       ),
                       Text(
