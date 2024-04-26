@@ -9,6 +9,7 @@ import 'ikev2_dart_platform_interface.dart';
 /// An implementation of [Ikev2DartPlatform] that uses method channels.
 class MethodChannelIkev2Dart extends Ikev2DartPlatform {
   MethodChannelIkev2Dart() {
+    listenToVpnState();
     methodChannel.setMethodCallHandler((call) {
       if (call.method == "updateVpnState" && call.arguments is int) {
         final state = FlutterVpnState.fromRawValue(call.arguments);
@@ -36,10 +37,13 @@ class MethodChannelIkev2Dart extends Ikev2DartPlatform {
   ///
   /// Can only be listened once. If have more than one subscription, only the
   /// last subscription can receive events.
-  @override
-  Stream<FlutterVpnState> get onStateChanged => eventChannel
-      .receiveBroadcastStream()
-      .map((e) => FlutterVpnState.values[e]);
+
+  void listenToVpnState() {
+    eventChannel.receiveBroadcastStream().listen((event) {
+      final state = FlutterVpnState.fromRawValue(event);
+      handler?.call(state);
+    });
+  }
 
   @override
   Stream<Map> get onTrafficReport =>
@@ -50,9 +54,6 @@ class MethodChannelIkev2Dart extends Ikev2DartPlatform {
   Future<FlutterVpnState> get currentState async {
     final state = await methodChannel.invokeMethod<int>('getCurrentState');
     assert(state != null, 'Received a null state from `getCurrentState` call.');
-    if (Platform.isWindows) {
-      return FlutterVpnState.connected;
-    }
     return FlutterVpnState.values[state!];
   }
 

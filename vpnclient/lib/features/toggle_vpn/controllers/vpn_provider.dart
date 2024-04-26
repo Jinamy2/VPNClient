@@ -11,6 +11,7 @@ class VpnProvider extends ChangeNotifier {
   VpnProvider() {
     Ikev2DartPlatform.instance.currentState.then((s) {
       state = s;
+      notifyListeners();
     });
     Ikev2DartPlatform.instance.setVpnStateChangeHandler(updateVpnState);
   }
@@ -23,7 +24,7 @@ class VpnProvider extends ChangeNotifier {
   }
 
   Future<void> toogleVPN() {
-    if (!isPrepared() && Platform.isAndroid) {
+    if (Platform.isAndroid) {
       Ikev2DartPlatform.instance.prepare();
     }
     if (state == FlutterVpnState.connected) {
@@ -38,10 +39,4 @@ class VpnProvider extends ChangeNotifier {
   }
 
   Future<void> disconnectVPN() => Ikev2DartPlatform.instance.disconnect();
-
-  bool isPrepared() {
-    bool isPrepared = false;
-    Ikev2DartPlatform.instance.prepared.then((value) => isPrepared = value);
-    return isPrepared;
-  }
 }

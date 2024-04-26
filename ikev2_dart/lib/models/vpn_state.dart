@@ -1,9 +1,9 @@
 // ignore_for_file: constant_identifier_names
 
 enum FlutterVpnState {
-  connected('VPN подключен', 2),
   disconnected('VPN отключен', 0),
   connecting('Подключение...', 1),
+  connected('VPN подключен', 2),
   disconnecting('Отключение...', 3),
   error('Попробуйте снова', 4);
 

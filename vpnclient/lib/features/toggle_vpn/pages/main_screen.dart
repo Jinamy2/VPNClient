@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:ikev2_dart/ikev2_dart_platform_interface.dart';
+import 'package:ikev2_dart/models/vpn_state.dart';
 import 'package:provider/provider.dart';
 import 'package:vpnclient/common/app_constants/app_routes.dart';
 import 'package:vpnclient/common/widgets/push_to_page_button.dart';
@@ -24,12 +28,16 @@ class MainScreen extends StatelessWidget {
                   const Spacer(
                     flex: 2,
                   ),
-                  ToogleVpnWidget(
-                    onTap: provider.toogleVPN,
-                    status: provider.state,
-                  ),
-                  VpnStatusText(
-                    status: provider.state,
+                  Column(
+                    children: [
+                      ToogleVpnWidget(
+                        onTap: provider.toogleVPN,
+                        status: provider.state,
+                      ),
+                      VpnStatusText(
+                        status: provider.state,
+                      ),
+                    ],
                   ),
                   const Spacer(
                     flex: 2,

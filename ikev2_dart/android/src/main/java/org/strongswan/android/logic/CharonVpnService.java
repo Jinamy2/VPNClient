@@ -140,28 +140,28 @@ public class CharonVpnService extends VpnService implements Runnable, VpnStateSe
             String tag = getPackageName();
             int importance = Log.INFO;
 
-            if (VPN_SERVICE_ACTION.equals(intent.getAction()) || !DISCONNECT_ACTION.equals(intent.getAction())) {
+             if (VPN_SERVICE_ACTION.equals(intent.getAction()) || !DISCONNECT_ACTION.equals(intent.getAction())) {
                 Bundle bundle = intent.getExtras();
                 if (bundle != null) {
                     profile = new VpnProfile();
-                    ArrayList<String> newIncluded = mService.getIncRouteRules();
-                    if (newIncluded.size() != 0) {
-                        ArrayList<String> includedSubnets = new ArrayList<>();
-                        for (String ipAddress : newIncluded) {
-                            includedSubnets.add(ipAddress + "/32");
-                        }
-                        profile.setIncludedSubnets(String.join(",", includedSubnets));
-                        Log.println(importance, tag, " add rule into profile");
-                    }
-                    ArrayList<String> newExcluded = mService.getExcRouteRules();
-                    if (newExcluded.size() != 0) {
-                        ArrayList<String> excludedSubnets = new ArrayList<>();
-                        for (String ipAddress : newExcluded) {
-                            excludedSubnets.add(ipAddress + "/32");
-                        }
-                        profile.setExcludedSubnets(String.join(",", excludedSubnets));
-                        Log.println(importance, tag, " add rule into profile");
-                    }
+                    //ArrayList<String> newIncluded = mService.getIncRouteRules();
+                    //if (newIncluded.size() != 0) {
+                        //ArrayList<String> includedSubnets = new ArrayList<>();
+                        // for (String ipAddress : newIncluded) {
+                        //     includedSubnets.add(ipAddress + "/32");
+                        // }
+                       // profile.setIncludedSubnets(String.join(",", includedSubnets));
+                        //Log.println(importance, tag, " add rule into profile");
+                    //}
+                    //ArrayList<String> newExcluded = mService.getExcRouteRules();
+                    //if (newExcluded.size() != 0) {
+                        //ArrayList<String> excludedSubnets = new ArrayList<>();
+                        // for (String ipAddress : newExcluded) {
+                        //     excludedSubnets.add(ipAddress + "/32");
+                        // }
+                       // profile.setExcludedSubnets(String.join(",", excludedSubnets));
+                        //Log.println(importance, tag, " add rule into profile");
+                   // }
                     profile.setId(1);
                     profile.setUUID(UUID.randomUUID());
                     profile.setName(bundle.getString("Name"));
@@ -923,7 +923,6 @@ public class CharonVpnService extends VpnService implements Runnable, VpnStateSe
         private final List<IPRange> mRoutesIPv6 = new ArrayList<>();
         private final IPRangeSet mIncludedSubnetsv4 = new IPRangeSet();
         private final IPRangeSet mIncludedSubnetsv6 = new IPRangeSet();
-        private final IPRangeSet mExcludedSubnets;
         private final int mSplitTunneling;
         private final SelectedAppsHandling mAppHandling;
         private final SortedSet<String> mSelectedApps;
@@ -932,16 +931,16 @@ public class CharonVpnService extends VpnService implements Runnable, VpnStateSe
         private boolean mIPv4Seen, mIPv6Seen, mDnsServersConfigured;
 
         public BuilderCache(VpnProfile profile) {
-            IPRangeSet included = IPRangeSet.fromString(profile.getIncludedSubnets());
-            for (IPRange range : included) {
-                if (range.getFrom() instanceof Inet4Address) {
-                    mIncludedSubnetsv4.add(range);
+            // IPRangeSet included = IPRangeSet.fromString(profile.getIncludedSubnets());
+            // for (IPRange range : included) {
+            //     if (range.getFrom() instanceof Inet4Address) {
+            //         mIncludedSubnetsv4.add(range);
 
-                } else if (range.getFrom() instanceof Inet6Address) {
-                    mIncludedSubnetsv6.add(range);
-                }
-            }
-            mExcludedSubnets = IPRangeSet.fromString(profile.getExcludedSubnets());
+            //     } else if (range.getFrom() instanceof Inet6Address) {
+            //         mIncludedSubnetsv6.add(range);
+            //     }
+            // }
+            // mExcludedSubnets = IPRangeSet.fromString(profile.getExcludedSubnets());
             Integer splitTunneling = profile.getSplitTunneling();
             mSplitTunneling = splitTunneling != null ? splitTunneling : 0;
             SelectedAppsHandling appHandling = profile.getSelectedAppsHandling();
@@ -1047,7 +1046,7 @@ public class CharonVpnService extends VpnService implements Runnable, VpnStateSe
                     } else {
                         ranges.addAll(mRoutesIPv4);
                     }
-                    ranges.remove(mExcludedSubnets);
+                    //ranges.remove(mExcludedSubnets);
                     for (IPRange subnet : ranges.subnets()) {
                         try {
                             builder.addRoute(subnet.getFrom(), subnet.getPrefix());
@@ -1074,7 +1073,7 @@ public class CharonVpnService extends VpnService implements Runnable, VpnStateSe
                     } else {
                         ranges.addAll(mRoutesIPv6);
                     }
-                    ranges.remove(mExcludedSubnets);
+                    //ranges.remove(mExcludedSubnets);
                     for (IPRange subnet : ranges.subnets()) {
                         try {
                             builder.addRoute(subnet.getFrom(), subnet.getPrefix());
