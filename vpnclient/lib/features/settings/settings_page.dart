@@ -27,6 +27,12 @@ class SettingsScreen extends StatelessWidget {
                 title: 'Сайты',
                 assetIcon: 'assets/website.svg',
               ),
+              PushToPageButton(
+                padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                onTap: () => Navigator.of(context).pushNamed(Routes.cert),
+                title: 'Инструкция установки сертификата',
+                assetIcon: 'assets/files.svg',
+              ),
               const Spacer(),
             ],
           ),

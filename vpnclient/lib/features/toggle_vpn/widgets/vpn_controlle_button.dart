@@ -20,8 +20,6 @@ class VpnControlleButton extends StatelessWidget {
         child: Stack(
           alignment: AlignmentDirectional.center,
           children: [
-            // if (status == VpnState.active)
-            //   const PulseEffectWidget(), // only when active
             const DecoratedBox(
               decoration: BoxDecoration(
                 color: AppColor.whiteColor,
@@ -45,7 +43,17 @@ class VpnControlleButton extends StatelessWidget {
                 height: 30,
                 width: 30,
               ),
-
+            if (status == FlutterVpnState.disconnecting ||
+                status == FlutterVpnState.connecting)
+              SvgPicture.asset(
+                'assets/load.svg',
+                height: 30,
+                width: 30,
+                colorFilter: const ColorFilter.mode(
+                  AppColor.mainPurple,
+                  BlendMode.srcATop,
+                ),
+              ),
             if (status == FlutterVpnState.connected)
               const Icon(
                 Icons.check,

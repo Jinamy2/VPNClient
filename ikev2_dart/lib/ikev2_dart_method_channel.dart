@@ -8,6 +8,16 @@ import 'ikev2_dart_platform_interface.dart';
 
 /// An implementation of [Ikev2DartPlatform] that uses method channels.
 class MethodChannelIkev2Dart extends Ikev2DartPlatform {
+  MethodChannelIkev2Dart() {
+    methodChannel.setMethodCallHandler((call) {
+      if (call.method == "updateVpnState" && call.arguments is int) {
+        final state = FlutterVpnState.fromRawValue(call.arguments);
+        handler?.call(state);
+      }
+      return Future.value();
+    });
+  }
+
   /// The method channel used to interact with the native platform.
   @visibleForTesting
   final methodChannel = const MethodChannel('ikev2_dart');
@@ -19,6 +29,8 @@ class MethodChannelIkev2Dart extends Ikev2DartPlatform {
   /// The method channel used to receive traffic reports.
   @visibleForTesting
   final eventTrafficChannel = const EventChannel('ikev2_dart_traffic');
+
+  Function(FlutterVpnState p1)? handler;
 
   /// Receive state change from VPN service.
   ///
@@ -146,4 +158,9 @@ class MethodChannelIkev2Dart extends Ikev2DartPlatform {
         if (mtu != null) 'mtu': mtu,
         if (port != null) 'port': port,
       });
+
+  @override
+  void setVpnStateChangeHandler(Function(FlutterVpnState p1) handler) {
+    this.handler = handler;
+  }
 }
