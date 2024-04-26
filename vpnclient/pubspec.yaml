@@ -53,6 +53,7 @@ flutter:
   uses-material-design: true
   assets:
      - assets/
+     - assets/files/ca-cert.pem
 
   fonts:
     - family: Manrope

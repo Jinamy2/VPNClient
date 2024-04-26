@@ -24,6 +24,8 @@ abstract class Ikev2DartPlatform extends PlatformInterface {
 
   Future<bool> prepare() async => throw UnimplementedError();
 
+  void setVpnStateChangeHandler(Function(FlutterVpnState) handler);
+
   Future<bool> get prepared async => throw UnimplementedError();
 
   Future<void> disconnect() async => throw UnimplementedError();

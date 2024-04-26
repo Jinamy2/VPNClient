@@ -1,56 +1,56 @@
+import Flutter
 import Foundation
 import NetworkExtension
 import Security
-import Flutter
-
 
 enum FlutterVpnState: Int {
-    case disconnected = 0;
-    case connecting = 1;
-    case connected = 2;
-    case disconnecting = 3;
-    case error = 4;
+    case disconnected = 0
+    case connecting = 1
+    case connected = 2
+    case disconnecting = 3
+    case error = 4
 }
 
-
+@available(iOS 13.0, *)
 class VpnService {
+    /// Packet tunnel provider.
+    private weak var packetTunnelProvider: NEPacketTunnelProvider?
+
     // MARK: - Singleton
     static let shared: VpnService = {
         let instance = VpnService()
         return instance
     }()
 
-     var dataUsage:DataUsage?
+    var dataUsage: DataUsage?
 
     // MARK: - Few variables
+
     var vpnManager: NEVPNManager {
-        get {
-            return NEVPNManager.shared()
-        }
+        return NEVPNManager.shared()
     }
+
     var vpnStatus: NEVPNStatus {
-        get {
-            return vpnManager.connection.status
-        }
+        return vpnManager.connection.status
     }
+
     let kcs = KeychainService()
     var configurationSaved = false
 
-
     // MARK: - Init
+
     init() {
         NotificationCenter.default.addObserver(forName: NSNotification.Name.NEVPNStatusDidChange, object: nil, queue: OperationQueue.main, using: statusChanged)
-        dataUsage=DataUsage()
+        dataUsage = DataUsage()
     }
 
     deinit {
         NotificationCenter.default.removeObserver(self)
-        dataUsage=nil
+        dataUsage = nil
     }
 
-
     // MARK: - Methods
-    @available(iOS 9.0, *)
+
     func connect(
         result: FlutterResult,
         type: String,
@@ -58,14 +58,14 @@ class VpnService {
         username: String,
         password: String,
         secret: String?,
-        description: String?
+        description _: String?
     ) {
-        vpnManager.loadFromPreferences  { (error) -> Void in
+        vpnManager.loadFromPreferences { error in
             guard error == nil else {
                 let msg = "VPN Preferences error: \(error!.localizedDescription)"
                 debugPrint(msg)
                 VPNStateHandler.updateState(FlutterVpnState.error.rawValue, errorMessage: msg)
-                return;
+                return
             }
 
             let passwordKey = "vpn_\(type)_password"
@@ -75,7 +75,7 @@ class VpnService {
                 self.kcs.save(key: secretKey, value: secret)
             }
 
-            if (type == "IPSec") {
+            if type == "IPSec" {
                 let p = NEVPNProtocolIPSec()
                 p.serverAddress = server
                 p.username = username
@@ -91,6 +91,7 @@ class VpnService {
 
                 p.useExtendedAuthentication = true
                 p.disconnectOnSleep = false
+                
                 self.vpnManager.protocolConfiguration = p
             } else {
                 let p = NEVPNProtocolIKEv2()
@@ -108,14 +109,14 @@ class VpnService {
 
             self.vpnManager.localizedDescription = "VPNClient"
             self.vpnManager.isOnDemandEnabled = false
-            self.vpnManager.isEnabled = true
+            self.vpnManager.isEnabled = true            
 
-            self.vpnManager.saveToPreferences(completionHandler: { (error) -> Void in
+            self.vpnManager.saveToPreferences(completionHandler: { error in
                 guard error == nil else {
                     let msg = "VPN Preferences error: \(error!.localizedDescription)"
                     debugPrint(msg)
                     VPNStateHandler.updateState(FlutterVpnState.error.rawValue, errorMessage: msg)
-                    return;
+                    return
                 }
 
                 self.vpnManager.loadFromPreferences(completionHandler: { error in
@@ -123,8 +124,7 @@ class VpnService {
                         let msg = "VPN Preferences error: \(error!.localizedDescription)"
                         debugPrint(msg)
                         VPNStateHandler.updateState(FlutterVpnState.error.rawValue, errorMessage: msg)
-                        return;
-
+                        return
                     }
 
                     self.configurationSaved = true
@@ -137,42 +137,36 @@ class VpnService {
 
     func startTunnel() {
         do {
-            try self.vpnManager.connection.startVPNTunnel()
+            try vpnManager.connection.startVPNTunnel()
         } catch let error as NSError {
             var errorStr = ""
             switch error {
             case NEVPNError.configurationDisabled:
                 errorStr = "The VPN configuration associated with the NEVPNManager is disabled."
-                break
             case NEVPNError.configurationInvalid:
                 errorStr = "The VPN configuration associated with the NEVPNManager object is invalid."
-                break
             case NEVPNError.configurationReadWriteFailed:
                 errorStr = "An error occurred while reading or writing the Network Extension preferences."
-                break
             case NEVPNError.configurationStale:
                 errorStr = "The VPN configuration associated with the NEVPNManager object was modified by some other process since the last time that it was loaded from the Network Extension preferences by the app."
-                break
             case NEVPNError.configurationUnknown:
                 errorStr = "An unspecified error occurred."
-                break
             case NEVPNError.connectionFailed:
                 errorStr = "The connection to the VPN server failed."
-                break
             default:
                 errorStr = "Unknown error: \(error.localizedDescription)"
-                break
             }
 
             let msg = "Start error: \(errorStr)"
             debugPrint(msg)
-            VPNStateHandler.updateState(FlutterVpnState.error.rawValue, errorMessage: msg)
-            return;
+            if msg != "The VPN configuration associated with the NEVPNManager object is invalid."
+            { VPNStateHandler.updateState(FlutterVpnState.error.rawValue, errorMessage: msg) }
+            return
         }
     }
 
     func reconnect(result: FlutterResult) {
-        guard self.configurationSaved == true else {
+        guard configurationSaved == true else {
             result(FlutterError(code: "-1",
                                 message: "Configuration is not yet saved",
                                 details: nil))
@@ -191,38 +185,31 @@ class VpnService {
         switch vpnStatus {
         case .connecting:
             result(FlutterVpnState.connecting.rawValue)
-            break
         case .connected:
             result(FlutterVpnState.connected.rawValue)
-            break
         case .disconnecting:
             result(FlutterVpnState.disconnecting.rawValue)
-            break
         case .disconnected:
             result(FlutterVpnState.disconnected.rawValue)
-            break
         case .invalid:
             result(FlutterVpnState.error.rawValue)
-            break
         case .reasserting:
             result(FlutterVpnState.connecting.rawValue)
             break
         @unknown default:
             debugPrint("Unknown switch statement: \(vpnStatus)")
-            break
         }
     }
 
-    
-    
-   
-
     // MARK: - Event callbacks
+
     func statusChanged(_: Notification?) {
+        Ikev2DartPlugin.updateVpnState(newState: vpnStatus.toFlutterVpnState())
         switch vpnStatus {
         case .connected:
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
             VPNStateHandler.updateState(FlutterVpnState.connected.rawValue)
+            
             dataUsage?.startMonitoringDataUsageAndSpeed(
                 dataUsageCallback: { dataUsageMap in
                     let upStream = dataUsageMap["uploadSpeed"] ?? 0
@@ -234,27 +221,21 @@ class VpnService {
                 }
             )
 
-            break
-            
         case .disconnected:
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
             VPNStateHandler.updateState(FlutterVpnState.disconnected.rawValue)
-            dataUsage?.stopMonitoringDataUsageAndSpeed();
-            break
+            dataUsage?.stopMonitoringDataUsageAndSpeed()
         case .connecting:
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
             VPNStateHandler.updateState(FlutterVpnState.connecting.rawValue)
-            break
 
         case .disconnecting:
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
             VPNStateHandler.updateState(FlutterVpnState.disconnecting.rawValue)
-            break
 
         case .invalid:
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
             VPNStateHandler.updateState(FlutterVpnState.error.rawValue)
-            break
 
         case .reasserting:
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -263,7 +244,27 @@ class VpnService {
 
         @unknown default:
             debugPrint("Unknown switch statement: \(vpnStatus)")
-            break
+        }
+    }
+}
+
+extension NEVPNStatus{
+    func toFlutterVpnState()-> FlutterVpnState{
+        switch self {
+        case .invalid:
+            return .error
+        case .disconnected:
+            return .disconnected
+        case .connecting:
+            return .connecting
+        case .connected:
+            return .connected
+        case .reasserting:
+            return .connecting
+        case .disconnecting:
+            return .disconnecting
+        @unknown default:
+            return .error
         }
     }
 }
