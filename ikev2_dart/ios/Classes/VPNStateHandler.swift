@@ -9,10 +9,9 @@ class VPNStateHandler: FlutterStreamHandler {
             return
         }
 
-        if let errorMsg = errorMessage {
-            sink(FlutterError(code: "\(newState)",
-                              message: errorMsg,
-                              details: nil))
+        if errorMessage != nil {
+            sink(newState)
+            debugPrint("error massage - \(errorMessage?.description)")
             return
         }
 

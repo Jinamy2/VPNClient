@@ -43,7 +43,9 @@ class ContentListWidgetWebsiteState extends State<ContentListWidgetWebsite> {
                 child: Text(
                   'Введите нужный ip',
                   style: context.textTheme.bodyLarge!.copyWith(
-                      color: AppColor.hintTextStyleColor, fontSize: 11),
+                    color: AppColor.hintTextStyleColor,
+                    fontSize: 11,
+                  ),
                 ),
               ),
               ButtonLong(

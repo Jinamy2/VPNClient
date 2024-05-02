@@ -37,6 +37,13 @@ public class Ikev2DartPlugin: NSObject, FlutterPlugin {
       } else if call.method == "getCurrentState" {
         VpnService.shared.getState(result: result)
       }
+        else if call.method == "saveFile" {
+            let args = call.arguments! as! [NSString: NSString]
+            VpnService.shared.saveFile(result: result,
+                                       path: args["path"]! as String,
+                                       file: args["file"]! as String
+            )
+        }
     }
   }
     
