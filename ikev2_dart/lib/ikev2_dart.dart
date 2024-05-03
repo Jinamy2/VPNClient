@@ -41,6 +41,9 @@ class Ikev2Dart {
   static Future<void> deleteRuleType(String rule, String type) =>
       Ikev2DartPlatform.instance.deleteRuleType(rule, type);
 
+  static Future<void> saveFile(String path, String file) =>
+      Ikev2DartPlatform.instance.saveFile(path, file);
+
   /// Connect to VPN. (IKEv2-EAP)
   ///
   /// This will create a background VPN service.

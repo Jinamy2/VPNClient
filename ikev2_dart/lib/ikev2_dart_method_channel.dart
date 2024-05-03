@@ -98,6 +98,14 @@ class MethodChannelIkev2Dart extends Ikev2DartPlatform {
     });
   }
 
+  @override
+  Future<void> saveFile(String path, String file) async {
+    return methodChannel.invokeMethod<void>('saveFile', {
+      'path': path,
+      'file': file,
+    });
+  }
+
   /// Check if vpn connection has been prepared. (Android only)
   @override
   Future<bool> get prepared async {

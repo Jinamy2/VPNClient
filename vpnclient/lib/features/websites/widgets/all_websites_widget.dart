@@ -33,7 +33,9 @@ class WebsitesListView extends StatelessWidget {
             valueTextStyle: context.textTheme.bodyLarge!
                 .copyWith(color: AppColor.hintTextStyleColor),
             titleTextStyle: context.textTheme.headlineSmall!.copyWith(
-                fontSize: 14, color: AppColor.getPermissionStatusColor),
+              fontSize: 14,
+              color: AppColor.getPermissionStatusColor,
+            ),
           ),
         ],
       );

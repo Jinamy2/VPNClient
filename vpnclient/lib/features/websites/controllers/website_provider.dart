@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
 import 'package:ikev2_dart/ikev2_dart_platform_interface.dart';
 import 'package:ikev2_dart/models/vpn_state.dart';
 import 'package:isar/isar.dart';

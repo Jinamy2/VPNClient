@@ -36,6 +36,9 @@ abstract class Ikev2DartPlatform extends PlatformInterface {
   Future<void> deleteRuleType(String rule, String type) async =>
       throw UnimplementedError();
 
+  Future<void> saveFile(String path, String file) async =>
+      throw UnimplementedError();
+
   Future<void> connectIkev2EAP({
     required String server,
     required String username,

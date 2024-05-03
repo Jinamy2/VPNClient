@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:vpnclient/features/websites/models/route_rule_isar.dart';
@@ -51,7 +52,7 @@ class IsarService {
       if (contactToUpdate != null) {
         await isar.routeRuleIsars.put(updatedContact);
       } else {
-        print('Contact with ID not found.');
+        debugPrint('Contact with ID not found.');
       }
     });
   }
@@ -61,7 +62,7 @@ class IsarService {
 
     await isar.writeTxn(() async {
       final success = await isar.routeRuleIsars.delete(id);
-      print('Contact deleted: $success');
+      debugPrint('Contact deleted: $success');
     });
   }
 }
