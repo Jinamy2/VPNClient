@@ -139,29 +139,31 @@ public class CharonVpnService extends VpnService implements Runnable, VpnStateSe
             boolean retry = false;
             String tag = getPackageName();
             int importance = Log.INFO;
+            VpnStateService vpnStateService;
 
              if (VPN_SERVICE_ACTION.equals(intent.getAction()) || !DISCONNECT_ACTION.equals(intent.getAction())) {
                 Bundle bundle = intent.getExtras();
                 if (bundle != null) {
                     profile = new VpnProfile();
-                    //ArrayList<String> newIncluded = mService.getIncRouteRules();
-                    //if (newIncluded.size() != 0) {
-                        //ArrayList<String> includedSubnets = new ArrayList<>();
-                        // for (String ipAddress : newIncluded) {
-                        //     includedSubnets.add(ipAddress + "/32");
-                        // }
-                       // profile.setIncludedSubnets(String.join(",", includedSubnets));
-                        //Log.println(importance, tag, " add rule into profile");
-                    //}
-                    //ArrayList<String> newExcluded = mService.getExcRouteRules();
-                    //if (newExcluded.size() != 0) {
-                        //ArrayList<String> excludedSubnets = new ArrayList<>();
-                        // for (String ipAddress : newExcluded) {
-                        //     excludedSubnets.add(ipAddress + "/32");
-                        // }
-                       // profile.setExcludedSubnets(String.join(",", excludedSubnets));
-                        //Log.println(importance, tag, " add rule into profile");
-                   // }
+                    vpnStateService = new VpnStateService();
+                    ArrayList<String> newIncluded = vpnStateService.getIncRouteRules();
+                    if (newIncluded != null) {
+                        ArrayList<String> includedSubnets = new ArrayList<String>();
+                         for (String ipAddress : newIncluded) {
+                             includedSubnets.add(ipAddress + "/32");
+                         }
+                        profile.setIncludedSubnets(String.join(",", includedSubnets));
+                        Log.println(importance, tag, " Add block rules into profile");
+                    }
+                    ArrayList<String> newExcluded = vpnStateService.getExcRouteRules();
+                    if (newExcluded != null) {
+                        ArrayList<String> excludedSubnets = new ArrayList<String>();
+                         for (String ipAddress : newExcluded) {
+                             excludedSubnets.add(ipAddress + "/32");
+                         }
+                        profile.setExcludedSubnets(String.join(",", excludedSubnets));
+                        Log.println(importance, tag, " Add direct rules into profile" + excludedSubnets);
+                    }
                     profile.setId(1);
                     profile.setUUID(UUID.randomUUID());
                     profile.setName(bundle.getString("Name"));

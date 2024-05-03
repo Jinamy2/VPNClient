@@ -30,7 +30,7 @@ class RoutingSettingsProvider extends ChangeNotifier {
     rulesList = await IsarService().getRules();
     for (final rule in rulesList) {
       await Ikev2DartPlatform.instance
-          .setRuleType(rule.ip ?? rule.domen ?? '8.8.8.8', rule.ruleType!);
+          .setRuleType(rule.ip ?? rule.domen ?? '0.0.0.0', rule.ruleType!);
     }
     notifyListeners();
   }

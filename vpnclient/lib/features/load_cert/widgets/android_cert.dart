@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:vpnclient/common/app_constants/app_colors.dart';
 import 'package:vpnclient/common/utils/extensions_app.dart';
@@ -11,40 +11,41 @@ import 'package:vpnclient/features/websites/widgets/button_long_widget.dart';
 
 Future<void> _pickDirectory() async {
   final status = await Permission.manageExternalStorage.status;
+  final Directory generalDownloadDir =
+      Directory('/storage/emulated/0/Download');
   debugPrint('storage permission $status');
-  if (status.isDenied) {
+  if (status.isDenied || status.isRestricted) {
     await Permission.manageExternalStorage.request();
+    await Permission.storage.request();
   }
+  if (status.isPermanentlyDenied) {
+    await openAppSettings();
+  }
+  final bool cantLauchDownload = status.isDenied || status.isRestricted;
   final certif = await rootBundle.loadString('assets/files/ca-cert.pem');
-  await FilePicker.platform
-      .getDirectoryPath(
-    dialogTitle: 'Выберете, куда сохранить файл',
-    lockParentWindow: true,
-  )
-      .then((value) async {
-    debugPrint(
-      'directory path - $value, ${await Permission.manageExternalStorage.status}',
-    );
-    if (!Platform.isIOS) {
-      await File('$value/ca-cert.pem')
-          .writeAsString(certif)
-          .then(
-            (value) => Fluttertoast.showToast(
-              msg: 'Файл сохранен!',
-            ),
+  final directory =
+      (await getExternalStorageDirectories(type: StorageDirectory.downloads))!
+          .first;
+  final File cert = cantLauchDownload
+      ? await File('${directory.path}/ca-cert.pem').create()
+      : await File('${generalDownloadDir.path}/ca-cert.pem').create();
+  debugPrint(cert.path);
+  await cert.writeAsString(certif).then((value) async {
+    cantLauchDownload
+        ? await Fluttertoast.showToast(
+            msg: 'Файл сохранен по пути ${value.path}!',
           )
-          .catchError(
-        (Object error) {
-          debugPrint(error.toString());
-        },
+        : await Fluttertoast.showToast(
+            msg: 'Файл сохранен в загрузки!',
+          );
+  }).catchError(
+    (Object error) {
+      Fluttertoast.showToast(
+        msg: 'Ошибка сохранения файла.',
       );
-    }
-
-    final path = value;
-    debugPrint(path);
-  }).catchError((Object error) {
-    debugPrint(error.toString());
-  });
+      return null;
+    },
+  );
 }
 
 class AndroidCert extends StatelessWidget {
@@ -75,7 +76,7 @@ class AndroidCert extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: Text(
-                '2. Перейдите в «Настройки» и выберите пункт "Безопасность" ("Безопасность и конфиденциальность")',
+                '2. Перейдите в «Настройки» и перейдите в настройки безопасности',
                 style: context.textTheme.headlineSmall!
                     .copyWith(color: AppColor.mainPurple),
                 textAlign: TextAlign.left,
@@ -84,7 +85,7 @@ class AndroidCert extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: Text(
-                '3. Перейдите в «Дополнительные настройки» и выберите "Шифрование и учетные данные")',
+                '3. Перейдите установку сертификатов и установите ЦС сертификат, скаченный по кнопке выше',
                 style: context.textTheme.headlineSmall!
                     .copyWith(color: AppColor.mainPurple),
                 textAlign: TextAlign.left,
@@ -93,7 +94,7 @@ class AndroidCert extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: Text(
-                '4. В окне «Установка профиля» нажмите «Установить». Установите сертификаты сразу после загрузки, иначе они удалятся автоматически',
+                '4. В параметрах безопасности убедитесь, что пользовательский сертификат установлен и устройство ему доверяет',
                 style: context.textTheme.headlineSmall!
                     .copyWith(color: AppColor.mainPurple),
                 textAlign: TextAlign.left,
@@ -102,25 +103,7 @@ class AndroidCert extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: Text(
-                '5. Вернитесь к основным настройкам (пункт 2) и перейдите в "Об этом устройстве"',
-                style: context.textTheme.headlineSmall!
-                    .copyWith(color: AppColor.mainPurple),
-                textAlign: TextAlign.left,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: Text(
-                '6. Выберите, пролистав вниз, пунт "Доверие сертификатам"',
-                style: context.textTheme.headlineSmall!
-                    .copyWith(color: AppColor.mainPurple),
-                textAlign: TextAlign.left,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: Text(
-                '6. В открывшемся окне выберете активным доверие к скаченному сертификату (VPN root CA)',
+                '5. Шаги установки сертифката могут быть специфичны для разных моделей телефонов, в случае некорректной иструкции к вашему телефону обратитиесь в Интернет',
                 style: context.textTheme.headlineSmall!
                     .copyWith(color: AppColor.mainPurple),
                 textAlign: TextAlign.left,

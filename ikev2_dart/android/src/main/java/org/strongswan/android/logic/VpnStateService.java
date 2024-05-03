@@ -58,8 +58,8 @@ public class VpnStateService extends Service {
     private Handler mHandler;
     private VpnProfile mProfile;
     private Bundle mProfileInfo;
-    private ArrayList<String> mExcludedSubnets = new ArrayList<>();
-    private  ArrayList<String>  mIncludedSubnetsv4 = new ArrayList<>();
+    private ArrayList<String> mExcludedSubnets = new ArrayList<String>();
+    private  ArrayList<String>  mIncludedSubnetsv4 = new ArrayList<String>();
     private State mState = State.DISABLED;
     private ErrorState mError = ErrorState.NO_ERROR;
     private ImcState mImcState = ImcState.UNKNOWN;
@@ -156,7 +156,7 @@ public class VpnStateService extends Service {
             }
             if (type.equals("block")){
                 mIncludedSubnetsv4.add(rule);
-                Log.println(importance, tag, " Add block rule, now suze -  "+ mIncludedSubnetsv4.size());
+                Log.println(importance, tag, " Add block rule, now size -  "+ mIncludedSubnetsv4.size());
             }
 
     }
