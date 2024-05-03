@@ -29,7 +29,7 @@ class RoutingSettingsProvider extends ChangeNotifier {
 
   Future<void> loadRouteRules() async {
     rulesList = await IsarService().getRules();
-    for (var rule in rulesList) {
+    for (final rule in rulesList) {
       await Ikev2DartPlatform.instance
           .setRuleType(rule.ip ?? rule.domen ?? '8.8.8.8', rule.ruleType!);
     }
@@ -112,15 +112,17 @@ class RoutingSettingsProvider extends ChangeNotifier {
     final String oldType = type == 'direct' ? 'block' : 'direct';
 
     await Ikev2DartPlatform.instance.deleteRuleType(
-        rulesList.firstWhere((e) => e.id == id).domen ??
-            rulesList.firstWhere((e) => e.id == id).ip ??
-            '8.8.8.8',
-        oldType);
+      rulesList.firstWhere((e) => e.id == id).domen ??
+          rulesList.firstWhere((e) => e.id == id).ip ??
+          '8.8.8.8',
+      oldType,
+    );
     await Ikev2DartPlatform.instance.setRuleType(
-        rulesList.firstWhere((e) => e.id == id).domen ??
-            rulesList.firstWhere((e) => e.id == id).ip ??
-            '8.8.8.8',
-        type);
+      rulesList.firstWhere((e) => e.id == id).domen ??
+          rulesList.firstWhere((e) => e.id == id).ip ??
+          '8.8.8.8',
+      type,
+    );
     rulesList.firstWhere((e) => e.id == id).ruleType = type;
     await IsarService()
         .updateRuleType(id, rulesList.firstWhere((e) => e.id == id));
@@ -129,9 +131,9 @@ class RoutingSettingsProvider extends ChangeNotifier {
   }
 
   // remove rule from lists
-  Future<void> delete(int id, String domain) async {
+  Future<void> delete(int id, String ip) async {
     await Ikev2DartPlatform.instance.deleteRuleType(
-      domain,
+      ip,
       rulesList.firstWhere((element) => element.id == id).ruleType!,
     );
     rulesList.remove(rulesList.firstWhere((element) => element.id == id));

@@ -146,17 +146,17 @@ public class VpnStateService extends Service {
     public void setRouteRule(String rule, String type)  {
             String tag = getPackageName();
             int importance = Log.INFO;
-            Log.println(importance, tag, " current size  mExcludedSubnets"+ mExcludedSubnets.size());
-            Log.println(importance, tag, " current size  mIncludedSubnetsv4"+ mIncludedSubnetsv4.size());
+            Log.println(importance, tag, " current size  mExcludedSubnets - "+ mExcludedSubnets.size());
+            Log.println(importance, tag, " current size  mIncludedSubnets - "+ mIncludedSubnetsv4.size());
             Log.println(importance, tag, " New rule "+ rule);
             Log.println(importance, tag, " New rule type "+ type);
             if (type.equals("direct")){
                 mExcludedSubnets.add(rule);
-                Log.println(importance, tag, " Add ditect rule");
+                Log.println(importance, tag, " Add ditect rule, now size - " + mExcludedSubnets.size());
             }
             if (type.equals("block")){
                 mIncludedSubnetsv4.add(rule);
-                Log.println(importance, tag, " Add block rule "+ mExcludedSubnets.size());
+                Log.println(importance, tag, " Add block rule, now suze -  "+ mIncludedSubnetsv4.size());
             }
 
     }
@@ -164,14 +164,18 @@ public class VpnStateService extends Service {
     public void deleteRouteRule(String rule, String type)  { 
         String tag = getPackageName();
         int importance = Log.INFO;
+        Log.println(importance, tag, " Delete rule");
         if (type.equals("direct")){
             int indexToRemove = mExcludedSubnets.indexOf(rule);
-            
+            Log.println(importance, tag, " Deleted rule - "+ indexToRemove);
             mExcludedSubnets.remove(indexToRemove);
+            Log.println(importance, tag, " Delete direct rule");
         }
         if (type.equals("block")){
             int indexToRemove = mIncludedSubnetsv4.indexOf(rule);
+            Log.println(importance, tag, " Deleted rule - "+ indexToRemove);
             mIncludedSubnetsv4.remove(indexToRemove);
+            Log.println(importance, tag, " Delete block rule");
         }
 
     }
