@@ -48,6 +48,60 @@ class VpnService {
         NotificationCenter.default.removeObserver(self)
         dataUsage = nil
     }
+    
+    private func documentDirectory() -> String {
+        let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory,
+                                                                    .userDomainMask,
+                                                                    true)
+        return documentDirectory[0]
+    }
+    
+    private func read(fromDocumentsWithFileName fileName: String) {
+        guard let filePath = self.append(toPath: self.documentDirectory(),
+                                         withPathComponent: fileName) else {
+                                            return
+        }
+        
+        do {
+            let savedString = try String(contentsOfFile: filePath)
+            
+            print(savedString)
+        } catch {
+            print("Error reading saved file")
+        }
+    }
+    
+    private func append(toPath path: String,
+                        withPathComponent pathComponent: String) -> String? {
+        if var pathURL = URL(string: path) {
+            pathURL.appendPathComponent(pathComponent)
+            print(pathURL.absoluteString)
+            
+            return pathURL.absoluteString
+        }
+        
+        return nil
+    }
+    
+    func saveFile(result: FlutterResult, path: String, file: String) {
+        guard let filePath = self.append(toPath: self.documentDirectory(),
+                                             withPathComponent: "ca-cert.pem") else {
+                return
+            }
+            
+            do {
+                try file.write(toFile: filePath,
+                               atomically: true,
+                               encoding: .utf8)
+            } catch {
+                print("Error", error)
+                return
+            }
+            
+            print("Save successful")
+           self.read(fromDocumentsWithFileName: "ca-cert.pem")
+        result(nil)
+    }
 
     // MARK: - Methods
 
@@ -159,7 +213,7 @@ class VpnService {
 
             let msg = "Start error: \(errorStr)"
             debugPrint(msg)
-            if msg != "The VPN configuration associated with the NEVPNManager object is invalid."
+            if msg != "Start error: The VPN configuration associated with the NEVPNManager object is invalid."
             { VPNStateHandler.updateState(FlutterVpnState.error.rawValue, errorMessage: msg) }
             return
         }
@@ -192,7 +246,7 @@ class VpnService {
         case .disconnected:
             result(FlutterVpnState.disconnected.rawValue)
         case .invalid:
-            result(FlutterVpnState.error.rawValue)
+            result(FlutterVpnState.disconnected.rawValue)
         case .reasserting:
             result(FlutterVpnState.connecting.rawValue)
             break
@@ -235,7 +289,7 @@ class VpnService {
 
         case .invalid:
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            VPNStateHandler.updateState(FlutterVpnState.error.rawValue)
+            //VPNStateHandler.updateState(FlutterVpnState.error.rawValue)
 
         case .reasserting:
             UIApplication.shared.isNetworkActivityIndicatorVisible = true

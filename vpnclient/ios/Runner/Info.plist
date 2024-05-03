@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
+	<key>LSFileQuarantineEnabled</key>
+	<true/>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -28,6 +34,14 @@
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict/>
+	<key>NSDesktopFolderUsageDescription</key>
+	<string>Need load cerificat for server connection</string>
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>Need load cerificat for server connection</string>
+	<key>NSFileProviderDomainUsageDescription</key>
+	<string>Need load cerificat for server connection</string>
+	<key>OSBundleUsageDescription</key>
+	<string>Need load cerificat for server connection</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

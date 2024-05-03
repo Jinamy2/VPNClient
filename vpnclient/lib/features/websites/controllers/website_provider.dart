@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
 import 'package:ikev2_dart/ikev2_dart_platform_interface.dart';
 import 'package:ikev2_dart/models/vpn_state.dart';
 import 'package:isar/isar.dart';
@@ -29,7 +28,7 @@ class RoutingSettingsProvider extends ChangeNotifier {
 
   Future<void> loadRouteRules() async {
     rulesList = await IsarService().getRules();
-    for (var rule in rulesList) {
+    for (final rule in rulesList) {
       await Ikev2DartPlatform.instance
           .setRuleType(rule.ip ?? rule.domen ?? '8.8.8.8', rule.ruleType!);
     }
@@ -112,15 +111,17 @@ class RoutingSettingsProvider extends ChangeNotifier {
     final String oldType = type == 'direct' ? 'block' : 'direct';
 
     await Ikev2DartPlatform.instance.deleteRuleType(
-        rulesList.firstWhere((e) => e.id == id).domen ??
-            rulesList.firstWhere((e) => e.id == id).ip ??
-            '8.8.8.8',
-        oldType);
+      rulesList.firstWhere((e) => e.id == id).domen ??
+          rulesList.firstWhere((e) => e.id == id).ip ??
+          '8.8.8.8',
+      oldType,
+    );
     await Ikev2DartPlatform.instance.setRuleType(
-        rulesList.firstWhere((e) => e.id == id).domen ??
-            rulesList.firstWhere((e) => e.id == id).ip ??
-            '8.8.8.8',
-        type);
+      rulesList.firstWhere((e) => e.id == id).domen ??
+          rulesList.firstWhere((e) => e.id == id).ip ??
+          '8.8.8.8',
+      type,
+    );
     rulesList.firstWhere((e) => e.id == id).ruleType = type;
     await IsarService()
         .updateRuleType(id, rulesList.firstWhere((e) => e.id == id));

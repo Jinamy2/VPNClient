@@ -77,7 +77,7 @@ class TextFieldWidget extends StatelessWidget {
                     fontSize: 12,
                   ),
                 ),
-              )
+              ),
           ],
         ),
       );

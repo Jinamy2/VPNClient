@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:ikev2_dart/ikev2_dart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vpnclient/common/app_constants/app_colors.dart';
 import 'package:vpnclient/common/app_constants/app_routes.dart';
@@ -51,6 +55,10 @@ class _InitPageState extends State<InitPage> {
 
     if (prefs.getBool('first_run') ?? true) {
       await Future.wait(keysToEliminate.map((key) => storage.delete(key: key)));
+      if (Platform.isIOS) {
+        final certif = await rootBundle.loadString('assets/files/ca-cert.pem');
+        await Ikev2Dart.saveFile('path', certif);
+      }
 
       await prefs.setBool('first_run', false);
     }
