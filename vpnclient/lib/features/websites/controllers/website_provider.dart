@@ -30,7 +30,7 @@ class RoutingSettingsProvider extends ChangeNotifier {
     rulesList = await IsarService().getRules();
     for (final rule in rulesList) {
       await Ikev2DartPlatform.instance
-          .setRuleType(rule.ip ?? rule.domen ?? '8.8.8.8', rule.ruleType!);
+          .setRuleType(rule.ip ?? rule.domen ?? '0.0.0.0', rule.ruleType!);
     }
     notifyListeners();
   }
@@ -130,9 +130,9 @@ class RoutingSettingsProvider extends ChangeNotifier {
   }
 
   // remove rule from lists
-  Future<void> delete(int id, String domain) async {
+  Future<void> delete(int id, String ip) async {
     await Ikev2DartPlatform.instance.deleteRuleType(
-      domain,
+      ip,
       rulesList.firstWhere((element) => element.id == id).ruleType!,
     );
     rulesList.remove(rulesList.firstWhere((element) => element.id == id));

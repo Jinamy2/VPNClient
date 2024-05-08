@@ -28,7 +28,8 @@ class VpnProvider extends ChangeNotifier {
       Ikev2DartPlatform.instance.prepare();
     }
     if (state == FlutterVpnState.connected ||
-        state == FlutterVpnState.connecting) {
+        state == FlutterVpnState.connecting ||
+        state == FlutterVpnState.error) {
       notifyListeners();
       return disconnectVPN();
     }
