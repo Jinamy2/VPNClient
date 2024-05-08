@@ -13,51 +13,64 @@
 #include <memory>
 #include <sstream>
 
-namespace ikev2_dart {
+namespace ikev2_dart
+{
 
-// static
-void Ikev2DartPlugin::RegisterWithRegistrar(
-    flutter::PluginRegistrarWindows *registrar) {
-  auto channel =
-      std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
-          registrar->messenger(), "ikev2_dart",
-          &flutter::StandardMethodCodec::GetInstance());
+  // static
+  void Ikev2DartPlugin::RegisterWithRegistrar(
+      flutter::PluginRegistrarWindows *registrar)
+  {
+    auto channel =
+        std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
+            registrar->messenger(), "ikev2_dart",
+            &flutter::StandardMethodCodec::GetInstance());
 
-  auto plugin = std::make_unique<Ikev2DartPlugin>();
+    auto plugin = std::make_unique<Ikev2DartPlugin>();
 
-  channel->SetMethodCallHandler(
-      [plugin_pointer = plugin.get()](const auto &call, auto result) {
-        plugin_pointer->HandleMethodCall(call, std::move(result));
-      });
+    channel->SetMethodCallHandler(
+        [plugin_pointer = plugin.get()](const auto &call, auto result)
+        {
+          plugin_pointer->HandleMethodCall(call, std::move(result));
+        });
 
-  registrar->AddPlugin(std::move(plugin));
-}
-
-Ikev2DartPlugin::Ikev2DartPlugin() {}
-
-Ikev2DartPlugin::~Ikev2DartPlugin() {}
-
-void Ikev2DartPlugin::HandleMethodCall(
-    const flutter::MethodCall<flutter::EncodableValue> &method_call,
-    std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
-  if (method_call.method_name().compare("connect") == 0) {
-    std::cout << "Connect";
-    //TODO connect to vpn
-    result->Success();
-  } else {
-    if (method_call.method_name().compare("disconnect") == 0) {
-      std::cout << "disconnect";
-      result->Success();
-      //TODO disconnect vpn
-    } else {
-     if (method_call.method_name().compare("getCurrentState") == 0) {
-      std::cout << "getCurrentState";
-      result->Success();
-      //TODO get state
-    } else {
-    result->NotImplemented();
+    registrar->AddPlugin(std::move(plugin));
   }
-  }
-}
 
-}  // namespace ikev2_dart
+  Ikev2DartPlugin::Ikev2DartPlugin() {}
+
+  Ikev2DartPlugin::~Ikev2DartPlugin() {}
+
+  void Ikev2DartPlugin::HandleMethodCall(
+      const flutter::MethodCall<flutter::EncodableValue> &method_call,
+      std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result)
+  {
+    if (method_call.method_name().compare("connect") == 0)
+    {
+      std::cout << "Connect";
+      // TODO connect to vpn
+      result->Success();
+    }
+    else
+    {
+      if (method_call.method_name().compare("disconnect") == 0)
+      {
+        std::cout << "disconnect";
+        result->Success();
+        // TODO disconnect vpn
+      }
+      else
+      {
+        if (method_call.method_name().compare("getCurrentState") == 0)
+        {
+          std::cout << "getCurrentState";
+          result->Success();
+          // TODO get state
+        }
+        else
+        {
+          result->NotImplemented();
+        }
+      }
+    }
+  }
+} // namespace ikev2_dart

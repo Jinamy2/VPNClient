@@ -9,11 +9,13 @@ import 'package:vpnclient/common/utils/getit_globals.dart';
 
 class VpnProvider extends ChangeNotifier {
   VpnProvider() {
-    Ikev2DartPlatform.instance.currentState.then((s) {
-      state = s;
-      notifyListeners();
-    });
-    Ikev2DartPlatform.instance.setVpnStateChangeHandler(updateVpnState);
+    if (!Platform.isWindows) {
+      Ikev2DartPlatform.instance.currentState.then((s) {
+        state = s;
+        notifyListeners();
+      });
+      Ikev2DartPlatform.instance.setVpnStateChangeHandler(updateVpnState);
+    }
   }
   FlutterVpnState state = FlutterVpnState.disconnected;
   CharonErrorState? charonState = CharonErrorState.NO_ERROR;

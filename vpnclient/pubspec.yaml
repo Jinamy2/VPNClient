@@ -38,6 +38,7 @@ dependencies:
   http: ^1.2.1
   file_picker: ^8.0.2
   permission_handler: ^11.3.1
+  toastification: ^2.0.0
   
 
 dev_dependencies:
