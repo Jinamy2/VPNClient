@@ -33,7 +33,7 @@ class ContentListWidgetWebsiteState extends State<ContentListWidgetWebsite> {
                 child: TextFieldSearch(
                   padding: EdgeInsets.zero,
                   onChange: (_) => provider.typingIntoAddManuallyTextField(),
-                  hintText: 'Введите ip адрес',
+                  hintText: 'Введите нужный ip адрес',
                   controller: provider.rulesFieldController,
                 ),
               ),
@@ -41,10 +41,10 @@ class ContentListWidgetWebsiteState extends State<ContentListWidgetWebsite> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
                 child: Text(
-                  'Введите нужный ip',
+                  'Введите ip адрес, при необходимости указав маску подсети (по умолчанию используется /0)',
                   style: context.textTheme.bodyLarge!.copyWith(
                     color: AppColor.hintTextStyleColor,
-                    fontSize: 11,
+                    fontSize: 12,
                   ),
                 ),
               ),

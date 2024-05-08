@@ -146,20 +146,32 @@ public class CharonVpnService extends VpnService implements Runnable, VpnStateSe
                 if (bundle != null) {
                     profile = new VpnProfile();
                     vpnStateService = new VpnStateService();
+                    profile.setSplitTunneling(1);
+                    //adresses than should go under vpn
                     ArrayList<String> newIncluded = vpnStateService.getIncRouteRules();
                     if (newIncluded != null) {
                         ArrayList<String> includedSubnets = new ArrayList<String>();
                          for (String ipAddress : newIncluded) {
-                             includedSubnets.add(ipAddress + "/32");
+                            if(ipAddress.contains("/")) {
+                                includedSubnets.add(ipAddress);
+                            } else {
+                                includedSubnets.add(ipAddress + "/0");
+                            }
                          }
                         profile.setIncludedSubnets(String.join(",", includedSubnets));
                         Log.println(importance, tag, " Add block rules into profile");
                     }
+                    //adresses than should go via vpn
                     ArrayList<String> newExcluded = vpnStateService.getExcRouteRules();
                     if (newExcluded != null) {
                         ArrayList<String> excludedSubnets = new ArrayList<String>();
                          for (String ipAddress : newExcluded) {
-                             excludedSubnets.add(ipAddress + "/32");
+                            if(ipAddress.contains("/")) {
+                                excludedSubnets.add(ipAddress);
+                            } 
+                            else {
+                             excludedSubnets.add(ipAddress + "/0");
+                            }
                          }
                         profile.setExcludedSubnets(String.join(",", excludedSubnets));
                         Log.println(importance, tag, " Add direct rules into profile" + excludedSubnets);

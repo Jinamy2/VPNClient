@@ -27,7 +27,7 @@ class SettingsScreen extends StatelessWidget {
                 PushToPageButton(
                   padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
                   onTap: () => Navigator.of(context).pushNamed(Routes.websites),
-                  title: 'Сайты',
+                  title: 'Исключения',
                   assetIcon: 'assets/website.svg',
                 ),
               PushToPageButton(

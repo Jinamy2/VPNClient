@@ -23,7 +23,7 @@ class WebsitesScreen extends StatelessWidget {
             appBar: AppBar(
               centerTitle: true,
               leading: const BackButtonApp(),
-              title: const Text('Сайты'),
+              title: const Text('Исключения'),
               toolbarHeight:
                   MediaQuery.of(navigatorKey.currentContext!).size.height *
                       0.13,
@@ -33,20 +33,20 @@ class WebsitesScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextFieldSearch(
-                    hintText: 'Поиск по сайтам',
+                    hintText: 'Поиск по исключениям',
                     onChange: (_) => provider.searchInUserWebsites(),
                     controller: provider.userWebsitesController,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: ButtonWithIcon(
-                      title: 'Добавить сайт',
+                      title: 'Добавить исключение',
                       assetIcon: 'assets/plus.svg',
                       styleText: context.textTheme.headlineMedium!
                           .copyWith(color: AppColor.mainPurple),
                       onTap: () => showAddWebsiteModal(
                         context,
-                        'Добавить сайт',
+                        'Добавить исключение',
                         ContentListWidgetWebsite(provider: provider),
                       ),
                     ),

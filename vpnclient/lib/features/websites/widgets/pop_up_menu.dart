@@ -34,7 +34,7 @@ class PopupMenu extends StatelessWidget {
           LinePopupMenu(
             onTap: () => onChange('block'),
             enable: type == 'block',
-            title: 'Блокировать',
+            title: 'Блокировать (через VPN)',
             value: 'block',
           ),
           LinePopupMenu(

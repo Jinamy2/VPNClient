@@ -85,6 +85,14 @@ class RoutingSettingsProvider extends ChangeNotifier {
     final domainToAdd = rulesFieldController.text;
     // can't allow to continue cause there's nothing to add
     if (domainToAdd.isEmpty) return;
+    final regex = RegExp(
+      r'^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/(3[0-2]|[12]?[0-9])$|^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$',
+    );
+
+    if (regex.hasMatch(domainToAdd)) {
+      throw Exception('Введите корректный Ip');
+    }
+
     final bool alreadyInList =
         searchMatchesInUserWebsites(rulesFieldController.text);
     if (alreadyInList) {
