@@ -87,10 +87,14 @@ class RoutingSettingsProvider extends ChangeNotifier {
     if (domainToAdd.isEmpty) return;
     final regex = RegExp(
       r'^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/(3[0-2]|[12]?[0-9])$|^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$',
+      multiLine: true,
     );
 
-    if (regex.hasMatch(domainToAdd)) {
-      throw Exception('Введите корректный Ip');
+    if (!regex.hasMatch(domainToAdd)) {
+      await Fluttertoast.showToast(
+        msg: 'Введите верный ip',
+      );
+      return;
     }
 
     final bool alreadyInList =
