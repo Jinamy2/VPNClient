@@ -23,7 +23,7 @@ class SettingsScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (!Platform.isIOS)
+              if (Platform.isAndroid)
                 PushToPageButton(
                   padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
                   onTap: () => Navigator.of(context).pushNamed(Routes.websites),

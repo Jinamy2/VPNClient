@@ -43,14 +43,14 @@ class IsarService {
     return contacts;
   }
 
-  Future<void> updateRuleType(int id, RouteRuleIsar updatedContact) async {
+  Future<void> updateRuleType(int id, RouteRuleIsar updatedRule) async {
     final isar = await db;
 
     await isar.writeTxn(() async {
       final contactToUpdate = await isar.routeRuleIsars.get(id);
 
       if (contactToUpdate != null) {
-        await isar.routeRuleIsars.put(updatedContact);
+        await isar.routeRuleIsars.put(updatedRule);
       } else {
         debugPrint('Contact with ID not found.');
       }
