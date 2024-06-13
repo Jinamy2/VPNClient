@@ -5,6 +5,7 @@ import 'package:vpnclient/common/utils/navigator_key.dart';
 import 'package:vpnclient/common/widgets/app_bar/components/back_button.dart';
 import 'package:vpnclient/features/load_cert/widgets/android_cert.dart';
 import 'package:vpnclient/features/load_cert/widgets/iOS_cert.dart';
+import 'package:vpnclient/features/load_cert/widgets/windows_cert.dart';
 
 class LoadCertScreen extends StatelessWidget {
   const LoadCertScreen({
@@ -24,7 +25,11 @@ class LoadCertScreen extends StatelessWidget {
               MediaQuery.of(navigatorKey.currentContext!).size.height * 0.13,
         ),
         body: Center(
-          child: Platform.isIOS ? const iOSCert() : const AndroidCert(),
+          child: Platform.isIOS
+              ? const iOSCert()
+              : Platform.isAndroid
+                  ? const AndroidCert()
+                  : const WindowsCert(),
         ),
       );
 }

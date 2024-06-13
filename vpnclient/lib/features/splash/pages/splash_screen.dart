@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ikev2_dart/ikev2_dart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toastification/toastification.dart';
 import 'package:vpnclient/common/app_constants/app_colors.dart';
 import 'package:vpnclient/common/app_constants/app_routes.dart';
 import 'package:vpnclient/common/utils/getit_globals.dart';
@@ -54,6 +55,17 @@ class _InitPageState extends State<InitPage> {
     final prefs = await SharedPreferences.getInstance();
 
     if (prefs.getBool('first_run') ?? true) {
+      toastification.show(
+        type: ToastificationType.info,
+        alignment: Alignment.bottomCenter,
+        primaryColor: AppColor.mainPurple,
+        style: ToastificationStyle.fillColored,
+        title: const Text(
+          'Не забудьте установить корневойй сертификат перед использованием VPN! Подробнее в "Настроки VPN"',
+        ),
+        showProgressBar: false,
+        autoCloseDuration: const Duration(seconds: 3),
+      );
       await Future.wait(keysToEliminate.map((key) => storage.delete(key: key)));
       if (Platform.isIOS) {
         final certif = await rootBundle.loadString('assets/files/ca-cert.pem');
